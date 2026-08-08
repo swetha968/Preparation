@@ -1,0 +1,921 @@
+1. Regarding branches creation for different environments bitbucket/git source control tool  -> Branching strategy.
+A. In Bitbucket/Git, branches are used to isolate changes for different environments (like development, staging, or production). 
+While you can create branches named after environments (e.g., staging, production), it's generally recommended to use separate branches for feature development and then merge those into environment-specific branches like develop or release.
+
+Branching Strategy:
+Feature Branches: Create branches for new features or bug fixes off of the develop branch.
+Develop Branch: This branch is for integrating feature branches and preparing for releases.
+Release Branches: Used for preparing a specific release, branched off develop.
+Production Branch: The main branch representing the live environment, usually branched from release after testing.
+Hotfix Branches: Used to address urgent issues in the production environment, branched from production.
+
+Creating Branches in Bitbucket:
+From the Repository:
+Navigate to your repository in Bitbucket, click the "Create" button, and select "Branch".
+From an Issue:
+If using Jira with Bitbucket, you can create a branch directly from an issue, and Bitbucket will suggest a name based on the issue and your branching model. 
+Specify Branch Type and Source:
+Choose a branch type (e.g., feature, release) and the source branch (e.g., develop, release). 
+Name the Branch:
+Give your branch a descriptive name, and Bitbucket will handle invalid characters. 
+Confirm and Push:
+Create the branch and then use git fetch and git checkout to switch to it locally, and then git push origin <branch_name> to push it to Bitbucket. 
+
+Managing Environment-Specific Branches:
+Avoid Direct Environment Branches:
+While you can create branches like staging or production, it's generally better to merge feature branches into develop and then use release branches for deployments to those environments. 
+Use CI/CD Pipelines:
+Integrate your Bitbucket repository with a CI/CD tool (like Bitbucket Pipelines) to automate deployments to different environments based on your branching strategy. 
+Branch Permissions:
+Use Bitbuckets branch permissions to control who can merge into specific branches, ensuring that only authorized personnel can make changes to production. 
+ 
+2. Realtime scenario where you applied the polymorphism in you application  -> Runtime and compile time polymorphism.
+A.  Compile time polymorphism :
+    Method Overloading  patient details 
+    Runtime Polymorphism:  patient service interface and service implementations.
+    Method Overriding  
+   
+ 
+3. How do you manage configuration from environment to environment
+   Have you externalize the configuration -> Cloud configuration
+
+Spring Cloud Config provides the centralized external configuration management system and it is designed to work well with modern microservices architectures. It is the part of larger Spring Config suite of the tools that aim to help the developers built the cloud-native applications.
+
+ It can serve the configuration across the multiple environments and applications.
+
+Client microservices connect to the Config Server to fetch their configurations.
+
+Config Server: A server in the Spring Cloud Config and its setup that can centralizes and manages all the configuration properties for the client applications.
+Config Client: The application that can fetches its the configuration from the Config Server using the Spring Cloud Config.
+@EnableConfigServer: This annotation can be used in Spring applications to designate them as the Config Server.
+Environment Repository: The storage system can be used by the Config Server to the hold and serve configuration properties and it is commonly backed by the Git repository.
+spring.config.import: The property in Spring Boot that can specifies the sources from which the application should import the additional configuration data of the Spring application.
+
+application.properties:
+spring.application.name=config-server
+
+server.port=8888
+spring.cloud.config.server.git.uri=https://github.com/iammahesh123/spring-cloud-config-server.git
+
+package org.example.configserver;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.config.server.EnableConfigServer;
+
+@SpringBootApplication
+@EnableConfigServer
+public class ConfigServerApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ConfigServerApplication.class, args);
+    }
+
+}
+
+
+4. Difference between rest services and microservices?
+A. REST Services (aka RESTful APIs)
+- What it is: A way to expose functionality over HTTP using standard methods like GET, POST, PUT, DELETE.
+- Purpose: Allows clients (like web or mobile apps) to interact with your application.
+- Stateless: Each request is independent—no session is stored on the server.
+- Example: A /books endpoint that returns a list of books in JSON format.
+Think of REST as the communication protocol.
+
+🧩 Microservices
+- What it is: An architectural style where an application is broken into small, independent services.
+- Each service Owns its own logic, database, and can be deployed independently.
+- Communication Often done via REST APIs, but can also use messaging (Kafka, RabbitMQ, etc.).
+- Example: A bookstore app might have separate microservices for Inventory, Orders, and Payments.
+Think of microservices as the structure of your application.
+
+ 
+5. Can you explain design architecture of restful what you worked on one example , To build a new rest api how do you get start
+	-> How do you build a spring boot restful project from the scratch using all the design principles and architecture
+ 
+ Step 1: Design the Architecture
+We’ll follow a layered architecture with clear separation of concerns:
+Client → Controller → Service → Repository → Database
+
+
+- Controller Layer: Handles HTTP requests and responses.
+- Service Layer: Contains business logic.
+- Repository Layer: Interacts with the database using Spring Data JPA.
+- DTOs: Used to transfer data between layers.
+
+1. model or entity
+2. Create Repository level
+3. service layer
+4.controller
+
+ 
+6. what is @Restcontroller actually mean
+ This annotation is a combination of @Controller and @ResponseBody, used for RESTful web services
+ @Controller: This annotation marks a class as a Spring MVC controller. It is used with @RequestMapping to handle web requests.
+
+@RequestMapping: This annotation maps HTTP requests to handler methods in the controller.
+ 
+@ResponseBody: This annotation indicates that the return value of the method should be used as the response body.
+
+
+7. Is restapi what you worked on json/xml based
+A. by default returns the Json.
+  
+ 
+8. Once you get the request into controller what are the different layers? 
+spring -->  Dispatcher servlet -> Rest Controller -> Service -> Database.
+
+springboot --> controller --> service  --> repository -->  database.
+	
+	Http error codes in restapi -> Remeber few http error codes as he might ask you to say few. 
+
+Message:	Description:
+200 OK	The request is OK (this is the standard response for successful HTTP requests)
+201 Created	The request has been fulfilled, and a new resource is created 
+ 
+Message:	Description:
+400 Bad Request	The request cannot be fulfilled due to bad syntax
+401 Unauthorized	The request was a legal request, but the server is refusing to respond to it. For use when authentication is possible but has failed or not yet been provided
+403 Forbidden	The request was a legal request, but the server is refusing to respond to it
+404 Not Found	The requested page could not be found but may be available again in the future
+ 
+ 
+Message:	Description:
+500 Internal Server Error	A generic error message, given when no more specific message is suitable
+502 Badgateway          
+ 
+	
+9. What are you using for logging? 
+AWS cloudwatch 
+
+ 
+10. Have you applied the design pattern for API level? 
+
+API level is a smart way to ensure consistency, scalability, and maintainability across microservices. Here are some common patterns I’ve seen used effectively in real-world API design:
+
+🧱 1. API Gateway Pattern
+The API Gateway pattern is the primary design pattern used for communicating with third-party microservices. This pattern acts as a central entry point, handling client requests and routing them to the appropriate microservice(s). 
+ 
+11. Did you get a chance to use circuit breaker pattern? 
+
+A. The Circuit Breaker Pattern is used to prevent system failures by stopping repeated calls to a failing service.
+
+State                           Description
+Closed (Normal State) -         Requests are allowed as usual. If failures exceed the threshold, it moves to Open.
+Open (Failure Detected)         No requests are sent to the failing service. Instead, an error response or fallback is returned.
+Half-Open (Testing Recovery)    A few test requests are sent. If they succeed, the circuit moves back to Closed. Otherwise, it stays Open.
+
+resilience4j.circuitbreaker:
+ instances:
+   myServiceCircuitBreaker:
+     failureRateThreshold: 50  # 50% failures will trip the circuit
+     waitDurationInOpenState: 5000ms  # Stay open for 5 seconds
+     permittedNumberOfCallsInHalfOpenState: 3
+     slidingWindowSize: 10  # Evaluate last 10 calls
+ 
+12. Are you aware about the solid principles
+SOLID principles are an object-oriented approach that are applied to software structure design. 
+These five principles have changed the world of object-oriented programming, and also changed the way of writing software. It also ensures that the software is modular, easy to understand, debug, and refactor. 
+
+S : Single Responsibility Principle (SRP)
+O : Open closed Principle (OSP)
+L : Liskov substitution Principle (LSP)
+I : Interface Segregation Principle (ISP)
+D : Dependency Inversion Principle (DIP)
+
+1. Single Responsibility Principle (SRP):
+This principle states that “a class should have only one reason to change” which means every class should have a single responsibility.
+
+2. Open/Closed Principle (OCP):
+Software entities (classes, modules, functions, etc.) should be open for extension, but closed for modification. This means you should be able to add new functionality without altering existing code.
+
+3. Liskov Substitution Principle (LSP):
+This principle states that “Derived or child classes must be substitutable for their base or parent classes”. In other words, if class A is a subtype of class B, then we should be able to replace B with A without interrupting the behavior of the program.
+
+4. Interface Segregation Principle (ISP):
+Clients should not be forced to depend on methods they do not use. Instead of large, all-encompassing interfaces, create smaller, more specific interfaces that cater to the needs of different clients.
+
+5. Dependency Inversion Principle (DIP):
+High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details. Details should depend on abstractions.
+
+Abstraction in Java is a core principle of Object-Oriented Programming (OOP) that focuses on hiding the complex implementation details and exposing only the essential features or functionalities to the user. It allows developers to manage complexity by presenting a simplified view of a system, emphasizing what an object does rather than how it does it. 
+
+Abstract Classes: These classes cannot be instantiated directly and may contain abstract methods (methods without a body) that must be implemented by concrete subclasses. They can also contain concrete methods with implementations.
+
+Interfaces: Interfaces define a contract of methods that a class must implement. They contain only abstract methods (before Java 8) or default/static methods (from Java 8 onwards), providing a blueprint for behavior without any implementation details.
+
+13. How do you handle exceptions ?
+
+14. How does a CICD flow works ?
+
+15. Database related annotations in spring boot.
+## Data Access Annotations
+- **@Entity**: Marks a class as a JPA entity,  indicating that instances of this class represent rows in a database table.
+- **@Table**: Specifies the table name for an entity, it differs from the entity class name.
+- **@Id**: Marks the primary key field.
+- **@GeneratedValue**: Specifies how the primary key should be generated.
+- **@Column**: Maps a field to a database column.
+
+Generation Strategies
+The @GeneratedValue annotation provides us with different strategies for the generation of primary keys, which are as follows : 
+
+1. GenerationType.IDENTITY
+
+Relies on the database’s auto-increment feature.
+Supported by MySQL, PostgreSQL, SQL Server, etc.
+Example:
+@Id
+
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+
+private Long id;
+
+2. GenerationType.SEQUENCE
+
+Uses a database sequence (Oracle, PostgreSQL).
+Requires a sequence object in the database.
+Example:
+@Id
+
+@GeneratedValue(strategy = GenerationType.SEQUENCE)
+
+private Long id;
+
+3. GenerationType.TABLE
+
+Uses a separate table to simulate sequences.
+Works across all databases but has performance overhead.
+Example:
+@Id
+
+@GeneratedValue(strategy = GenerationType.TABLE)
+
+private Long id;
+
+4. GenerationType.AUTO (Default)
+
+JPA provider choose the best strategy based on the database.
+Example:
+@Id
+
+@GeneratedValue(strategy = GenerationType.AUTO)
+
+private Long id;
+
+5. GenerationType.UUID 
+
+Generates a Universally Unique Identifier (UUID) compliant with RFC 4122.
+Ideal for distributed systems where uniqueness across databases is required.
+
+16. How do you monitor and manage spring boot applications? any previous experience on it?
+Monitoring and managing Spring Boot applications is essential for ensuring reliability, performance, and quick troubleshooting in production. Here’s how it’s typically done:
+
+🔍 1. Spring Boot Actuator
+This is your first stop for built-in monitoring.
+- What it does: Exposes endpoints like /actuator/health, /actuator/metrics, /actuator/env, etc.
+- How to use: Add this dependency:
+
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+
+- Customize endpoints in application.properties
+management.endpoints.web.exposure.include=health,info,metrics
+
+17. How do you interact with the logs? Which tool have you used for doing it? 
+A. Amazon CloudWatch is a powerful observability and monitoring service from AWS that helps you keep an eye on your cloud infrastructure and applications in real time.
+
+ Metrics Monitoring
+- Collects and tracks metrics from AWS services like EC2, Lambda, RDS, and custom applications.
+- You can create dashboards to visualize performance data like CPU usage, memory, and request latency.
+
+ Alarms & Notifications
+- Set thresholds on metrics (e.g., CPU > 80%) and trigger alarms.
+- Alarms can notify you via SNS, trigger Auto Scaling, or even invoke Lambda functions for automated remediation.
+
+
+18. How does multiple services communicate with each other in a micro services architecture?
+A. RestTemplate and feign client 
+
+19. How many asynchronous communications are there in ms architecture?
+A. 1. Message Queues
+Services communicate by sending messages to a queue (e.g., RabbitMQ, Amazon SQS). Other services consume these messages at their own pace.
+Use case: Order processing, background jobs, decoupling services.
+
+📡 2. Event Streaming
+Services publish events to a stream (e.g., Apache Kafka), and multiple consumers can subscribe to those events.
+Use case: Real-time analytics, audit logs, data pipelines.
+
+🔔 3. Webhooks
+External systems notify your service via HTTP POST when an event occurs.
+Use case: Payment confirmations, GitHub push events, third-party integrations.
+
+🧠 4. Event-Driven Architecture (EDA)
+Microservices emit domain events (like OrderPlaced, UserRegistered) and other services react to them.
+Use case: Loose coupling, scalability, reactive workflows.
+
+📨 5. Publish/Subscribe (Pub/Sub)
+A messaging pattern where publishers send messages to a topic, and subscribers receive relevant messages.
+Use case: Notification systems, chat apps, IoT.
+
+🧵 6. Asynchronous HTTP with Callbacks
+A service makes a request and provides a callback URL for the response later.
+Use case: Long-running operations like file processing or report generation.
+
+
+
+20. What are the various steps involved from build to prod.(CICD) 
+	Deployment models -> Blue green deployments, flag based deployments e.t.c
+
+Rundeck tool:
+Environment : prod_green
+
+builds generated and saved on AWS s3.
+
+1. prod green
+2. prod wheat
+3. prod ttu
+
+	
+21. Some git commands and webhook knowledge is necessary. 
+
+CI/CD: GitHub Webhooks
+When someone pushes code to a GitHub repo, a webhook can notify Jenkins to start a build and run tests automatically.
+
+1. Goto the GitHub account
+2. choose the settings
+3. Go to the webhooks and add webhook --> Payload url , content type , secret - Password  used to ensure that the requests sent to payload URL are from GitHub.
+
+22. Executor service knowledge is necessary as it might be required in ms architecture.
+ExecutorService in Java is a framework that simplifies multi-threading by managing a pool of threads and executing tasks asynchronously. It is part of the java.util.concurrent package and provides better control over thread execution compared to manually creating threads.
+
+Why It’s Useful in Microservices
+- Parallel Task Execution
+In a microservice, you might need to call multiple downstream services or perform I/O-heavy operations. Using ExecutorService, you can run these tasks in parallel to reduce latency.
+- Asynchronous Processing
+For background jobs (e.g., sending emails, processing files), ExecutorService lets you offload work from the main thread without blocking the request-response cycle.
+- Rate Limiting & Resource Control
+Thread pools help you control concurrency and avoid overwhelming your system or external services.
+- Retry & Timeout Logic
+You can wrap tasks with retry mechanisms and use Future.get(timeout) to enforce timeouts.
+
+
+
+23. Feign client, RestTemplate and WebClient -> To make http calls. which one to use and when.
+
+ 1. RestTemplate 🌟
+Overview:
+RestTemplate is a synchronous HTTP client that has been the standard in Spring for a long time. It’s simple to use and integrates well with Spring Boot.
+
+Features:
+
+Synchronous Calls: Makes blocking HTTP requests.
+Simple API: Easy to use with straightforward methods for GET, POST, PUT, DELETE, etc.
+Customizable: Allows for custom error handlers, interceptors, and message converters.
+
+public class RestTemplateExample {
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    public String getExample() {
+        String url = "https://api.example.com/data";
+        return restTemplate.getForObject(url, String.class);
+    }
+}
+
+
+When to Use:
+
+When working with legacy codebases.
+For simple, blocking HTTP requests.
+When synchronous behavior is acceptable.
+
+
+2. WebClient 🌐
+Overview:
+WebClient is the non-blocking, reactive HTTP client introduced in Spring 5. It’s part of the Spring WebFlux module and is ideal for modern applications requiring high concurrency.
+
+Features:
+
+Asynchronous Calls: Supports non-blocking operations and reactive programming.
+Rich API: Provides a more flexible and fluent API compared to RestTemplate.
+Backpressure Support: Handles high loads and backpressure gracefully.
+
+public class WebClientExample {
+    private final WebClient webClient = WebClient.create("https://api.example.com");
+
+    public Mono<String> getExample() {
+        return webClient.get()
+                        .uri("/data")
+                        .retrieve()
+                        .bodyToMono(String.class);
+    }
+}
+
+
+When to Use:
+For applications using reactive programming or WebFlux.
+When you need non-blocking and asynchronous HTTP requests.
+For high-performance applications with many concurrent requests.
+
+
+FeignClient 🎯
+Overview:
+FeignClient is a declarative HTTP client that simplifies HTTP communication by creating interfaces that map to web services. It integrates seamlessly with Spring Cloud for microservices.
+
+Features:
+
+Declarative API: Define clients using Java interfaces and annotations.
+Integrated with Spring Cloud: Works well with service discovery and load balancing.
+Support for Load Balancing: Automatically integrates with Ribbon or other load balancers.
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@FeignClient(name = "example-client", url = "https://api.example.com")
+public interface ExampleClient {
+    @GetMapping("/data")
+    String getExample();
+}
+
+When to Use:
+
+For microservices architectures where declarative clients are beneficial.
+When you want to use Spring Cloud features like service discovery and load balancing.
+For a clean and easy-to-maintain HTTP client interface.
+
+Feature	                        RestTemplate	WebClient	              FeignClient
+Synchronous/Asynchronous	Synchronous	Asynchronous	                Synchronous
+API Type	                Imperative	Fluent & Reactive	        Declarative
+Reactive Support	  		No	Yes	                          No
+Backpressure				No	Yes	                          No
+Microservices Integration		Limited	Limited				Excellent
+Ease of Use				Simple	Complex (for beginners)	        Very simple
+
+Choosing the Right Client
+Use RestTemplate if you're maintaining legacy applications and do not require reactive features.
+Use WebClient if you need a modern, non-blocking HTTP client with support for reactive programming.
+Use FeignClient if you’re working within a Spring Cloud environment and prefer declarative client interfaces.
+
+
+24. How does oauth2 work. Can you please explain the flow of it. What is oauth code and token and its differences? 
+The OAuth 2.0 authorization code grant type, or auth code flow, enables a client application to obtain authorized access to protected resources like web APIs.
+
+25. How do you authenticate and authorize the request and how. Can you show me a piece of code which does that. 
+JWT
+
+Authentication (Login):
+The client sends credentials (e.g., username and password) to the server's authentication endpoint.
+The server validates these credentials.
+If valid, the server generates a JWT containing user information and claims (e.g., roles, permissions) and signs it with a secret key.
+The server sends this JWT back to the client.
+
+Authorization (Subsequent Requests):
+The client stores the received JWT and includes it in the Authorization header of subsequent requests (usually as Bearer <token>).
+The server intercepts the request, extracts the JWT, and validates its signature and expiration.
+If valid, the server extracts the claims from the JWT, particularly those related to roles or permissions.
+Based on these claims and the requested resource/action, the server determines if the authenticated user is authorized to perform the operation.
+
+
+Header: Contains metadata about the token, such as the algorithm used for signing.
+
+{
+    "alg": "HS256",
+    "typ": "JWT"
+}
+Payload: Stores the claims, i.e., data being transmitted.
+
+{
+    "userId": 123,
+    "role": "admin",
+    "exp": 1672531199
+}
+
+Signature: Ensures the token's integrity and authenticity.
+
+secret key
+
+
+  private String createToken(Map<String, Object> claims, String subject) {
+        return Jwts.builder().setClaims(claims).setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours expiration
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
+    }
+
+public String generateToken(Authentication authentication) {
+    return Jwts.builder()
+        .setSubject(authentication.getName())
+        .setIssuedAt(new Date())
+        .setExpiration(new Date(System.currentTimeMillis() + JWT_EXPIRATION))
+        .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
+        .compact();
+}
+
+@RestController
+public class SecuredController {
+
+    @GetMapping("/secured/hello")
+    @PreAuthorize("hasRole('Admin')") // Example authorization based on role
+    public String securedHello() {
+        return "Hello from secured endpoint!";
+    }
+}
+
+What will do JWT Token is expired middle of the Operation it will throw the 401 unauthorized error?
+A. When a JWT access token expires in the middle of an operation in a Spring Boot application, the primary solution is a refresh token mechanism.
+
+Issue Refresh Tokens:
+Upon successful user authentication, issue both a short-lived access token and a longer-lived refresh token. The access token is used for accessing protected resources, while the refresh token is used to obtain new access tokens.
+
+Client-Side Handling:
+The client application should be aware of the access token's expiration time. When an API call fails due to an expired access token (e.g., a 401 Unauthorized status code), the client should attempt to use the refresh token to acquire a new access token from a dedicated refresh endpoint
+
+Server-Side Refresh Endpoint:
+Implement a secure endpoint in your Spring Boot application that accepts a valid refresh token and, if verified, issues a new access token (and optionally a new refresh token).
+
+Security Considerations:
+Refresh tokens should be stored securely on the client-side (e.g., HTTP-only cookies).
+Refresh tokens should also have an expiration time and potentially be revokable on the server-side to enhance security.
+Implement mechanisms to detect and prevent refresh token reuse if not intended.
+
+How to implement in Spring Boot:
+JWT Generation and Validation:
+Utilize a library like jjwt to generate and validate JWTs.
+
+Authentication Filter:
+Create a custom Spring Security filter (e.g., JwtAuthenticationFilter) that intercepts requests, extracts the JWT, validates it, and sets the Authentication object in the SecurityContext. This filter will catch expired access tokens.
+
+Refresh Token Endpoint:
+Create a dedicated controller endpoint (e.g., /api/auth/refresh-token).
+This endpoint will receive the refresh token from the client.
+Validate the refresh token against a stored record (e.g., in a database or Redis).
+If valid, generate a new access token (and potentially a new refresh token) and return it to the client.
+
+Client-Side Logic:
+In your frontend application (e.g., using JavaScript), implement logic to check for token expiration or handle 401 responses.
+If a token is expired or an unauthorized error occurs, send a request to your refresh token endpoint with the refresh token.
+Upon receiving a new access token, update it in your client-side storage and retry the original failed request.
+
+// JwtAuthenticationFilter (simplified)
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    // ... inject JwtService
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String jwt = authHeader.substring(7);
+            try {
+                // Validate JWT and set Authentication in SecurityContext
+            } catch (ExpiredJwtException e) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Indicate token expired
+                response.getWriter().write("Access token expired.");
+                return;
+            }
+        }
+        filterChain.doFilter(request, response);
+    }
+}
+
+// AuthController (simplified refresh endpoint)
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
+    // ... inject RefreshTokenService, JwtService
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest request) {
+        // Validate refresh token, generate new access token
+        // Return new access token and refresh token
+        return ResponseEntity.ok(new JwtResponse(newAccessToken, newRefreshToken));
+    }
+}
+
+ACCESS_TOKEN: When a user logins in, the authorization server issues an access token, which is an artifact that client applications can use to make secure calls to an API server.
+
+REFRESH_TOKEN: ACCESS_TOKEN has short lifespan. So when ACCESS_TOKEN expires REFRESH_TOKEN is used to get a new ACCESS_TOKEN.
+
+============================================================================================================================================================
+
+How to configure multiple databases in a springboot application?
+A. Configuring two different types of databases (e.g., MySQL and MongoDB) in a Spring Boot application involves setting up separate configurations for each data source.
+
+1. Dependencies:
+Include the necessary database drivers and Spring Data modules in your pom.xml (for Maven) or build.gradle (for Gradle). For example, spring-boot-starter-data-jpa and the specific database drivers like mysql-connector-java and mongodb-driver-sync.
+
+2. Application Properties:
+Define the connection details for each database in application.properties or application.yml, using distinct prefixes.
+
+# Primary Database
+spring.datasource.primary.url=jdbc:mysql://localhost:3306/primary_db
+spring.datasource.primary.username=primary_user
+spring.datasource.primary.password=primary_password
+spring.datasource.primary.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# Secondary Database
+spring.datasource.secondary.url=jdbc:postgresql://localhost:5432/secondary_db
+spring.datasource.secondary.username=secondary_user
+spring.datasource.secondary.password=secondary_password
+spring.datasource.secondary.driver-class-name=org.postgresql.Driver
+
+3. Configuration Classes:
+Create separate @Configuration classes for each database.
+
+Mark one of the DataSource beans with @Primary if you want it to be the default when no specific data source is indicated.
+
+@Bean
+@Primary
+@ConfigurationProperties(prefix="spring.datasource")
+public DataSource primaryDataSource() {
+    return DataSourceBuilder.create().build();
+}
+
+@Bean
+@ConfigurationProperties(prefix="spring.secondDatasource")
+public DataSource secondaryDataSource() {
+    return DataSourceBuilder.create().build();
+}
+===========================================================================================================================================================
+
+how backend application connect with Frontend like reactjs in java application?
+A. Backend applications, such as those built with Java (e.g., using Spring Boot), connect with frontend applications like ReactJS primarily through RESTful APIs (Application Programming Interfaces). This involves the frontend making HTTP requests to specific endpoints exposed by the backend, which then processes the requests and sends back responses, typically in JSON format.
+
+1. Backend (Java/Spring Boot):
+Create RESTful Endpoints: The Java backend defines endpoints (URLs) that perform specific actions (e.g., retrieving data, creating new entries, updating existing ones, deleting). These endpoints are associated with HTTP methods (GET, POST, PUT, DELETE).
+
+    // ProductController.java
+    @RestController
+    @RequestMapping("/api/products")
+    @CrossOrigin(origins = "http://localhost:3000") // Allow requests from React dev server
+    public class ProductController {
+
+        @GetMapping
+        public List<Product> getAllProducts() {
+            // Logic to fetch products from a database
+            return productService.findAll();
+        }
+
+        @PostMapping
+        public Product createProduct(@RequestBody Product product) {
+            // Logic to save a new product
+            return productService.save(product);
+        }
+    }
+
+2. Frontend (ReactJS):
+Make HTTP Requests: The React application uses libraries like fetch (built-in) or Axios to send HTTP requests to the backend's API endpoints.
+Handle Responses: The frontend receives the JSON response from the backend and uses it to update the UI or perform other actions.
+
+    // ProductList.js
+    import React, { useState, useEffect } from 'react';
+    import axios from 'axios'; // Or use built-in fetch
+
+    function ProductList() {
+        const [products, setProducts] = useState([]);
+
+        useEffect(() => {
+            axios.get('http://localhost:8080/api/products') // Backend API endpoint
+                .then(response => {
+                    setProducts(response.data);
+                })
+                .catch(error => {
+                    console.error('Error fetching products:', error);
+                });
+        }, []);
+
+        return (
+            <div>
+                <h1>Products</h1>
+                <ul>
+                    {products.map(product => (
+                        <li key={product.id}>{product.name} - ${product.price}</li>
+                    ))}
+                </ul>
+            </div>
+        );
+    }
+
+    export default ProductList;
+
+
+In summary, the connection relies on:
+RESTful API design: Backend exposes well-defined endpoints.
+HTTP communication: Frontend sends requests (GET, POST, etc.) and backend responds.
+Data format: JSON is the common standard for exchanging data between frontend and backend.
+CORS configuration: Essential for enabling cross-origin communication during development and deployment.
+
+============================================================================================================================================================
+What is the OAuth2 Authorization Code?
+- It's a temporary code issued by the authorization server after the user successfully authenticates.
+- This code is sent to the client application via a redirect URI.
+- The client then exchanges this code for an access token, which can be used to access protected resources.
+
+============================================================================================================================================================
+What is Cucumber?
+A. Cucumber is a testing framework that supports Behaviour-Driven Development (BDD)
+It allows writing tests in plain, natural language, which can be understood by the non technical stakeholders.
+Cucumber supports a wide range of programming languages like java,ruby and JavaScript.
+
+Key features of Cucumber?
+Gherkin language -Cucumber uses Gherkin, a structured language for defining the test scenarios in plain text.
+Collaboration tool :  Cucumber facilitates collaboration between developers and testers and business stakeholders.
+Cross-language Compatibility - It can be used with multititle programming languages.
+Executable specifications - The scenarios written in Gherkin are turned into executable tests. 
+
+
+Basic structure of a Cucumber test:
+
+1. Feature test: Contains the Gherkin language , defining the feature and scenarios. (which ends with .feature extension)
+fileName:  login.feature
+
+Test scenarios are defined in .feature files using Gherkin keywords: Feature, Scenario, Given, When, Then, And, But.
+These files describe the desired behavior of the system in a human-readable format.
+
+        Feature: User Login
+          Scenario: Successful Login
+            Given a user is on the login page
+            When the user enters valid credentials
+            And clicks the login button
+            Then the user should be redirected to the dashboard
+
+
+2.Step Definitions: The Actual code that maps the Gherkin steps to code functions.
+
+Java classes contain the actual code that implements the steps defined in the feature files.
+Annotations like @Given, @When, @Then link the Gherkin steps to their corresponding Java methods.
+These methods utilize libraries like Selenium WebDriver to interact with the application under test.
+
+
+3. Runner class : Executes the cucumber tests and connects the feature files to the step definitions.
+A Java class, often annotated with @RunWith(Cucumber.class) (for JUnit) or configured with TestNG, executes the Cucumber tests.
+It specifies the location of feature files and step definitions.
+
+
+1. Project Setup:
+Prerequisites: Ensure Java Development Kit (JDK) is installed and configured.
+
+Build Tool: Use Maven or Gradle to manage project dependencies. Create a new Maven or Gradle project.
+
+Dependencies: Add necessary dependencies in your pom.xml (Maven) or build.gradle (Gradle) for Cucumber-Java, JUnit/TestNG (for test execution), and Selenium (if automating web applications).
+
+2. Framework Structure:
+Feature Files:
+Create .feature files under src/test/resources/features to define test scenarios in Gherkin syntax (Given-When-Then).
+
+Step Definitions:
+Create Java classes under src/test/java/stepdefinitions to implement the logic for each step defined in the feature files. Use Cucumber annotations like @Given, @When, @Then, @And, @But to link Gherkin steps to Java methods.
+
+Test Runner:
+Create a Java class under src/test/java/runner to act as the test runner. This class will use Cucumber's CucumberOptions annotation to specify the location of feature files, step definitions, and reporting options. Extend AbstractTestNGCucumberTests or use JUnit's @RunWith(Cucumber.class) annotation.
+
+
+3. Implementing Test Logic:
+Feature Files: Write clear and concise scenarios using Gherkin keywords.
+
+Step Definitions: Implement the actual test logic within the corresponding step definition methods. This might involve interacting with web elements using Selenium WebDriver, performing calculations, or asserting expected outcomes.
+
+Hooks (Optional): Use @Before and @After hooks in step definition classes to perform setup (e.g., browser initialization) and teardown (e.g., closing the browser) actions before and after scenarios or features.
+
+4. Running Tests and Reporting:
+Execution:
+Run tests through your IDE's test runner, Maven (mvn test), or Gradle (gradle test).
+
+Reporting:
+Configure Cucumber plugins in the test runner to generate reports (e.g., HTML, JSON) for analyzing test results.
+
+
+Project:
+1. Project Setup (Maven/Gradle):
+A Maven or Gradle project is created, and the necessary dependencies for Cucumber, JUnit (for running tests), and potentially Selenium (for web automation) are added to the pom.xml or build.gradle file.
+core main dependency
+2. Feature Files (.feature):
+These files define the high-level behavior of the application using Gherkin syntax (Given-When-Then).
+
+Feature: User Login
+  Scenario: Successful Login with Valid Credentials
+    Given the user is on the login page
+    When the user enters "username" and "password"
+    And clicks the login button
+    Then the user should be redirected to the home page
+
+3. Step Definitions (Java Classes):
+Java classes contain the implementation for each step defined in the feature files. These methods are annotated with @Given, @When, and @Then to link them to the Gherkin steps.
+
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.When;
+import io.cucumber.java.en.Then;
+
+public class LoginSteps {
+
+    @Given("the user is on the login page")
+    public void userIsOnLoginPage() {
+        // Code to navigate to the login page
+    }
+
+    @When("the user enters {string} and {string}")
+    public void userEntersCredentials(String username, String password) {
+        // Code to enter username and password
+    }
+
+    @When("clicks the login button")
+    public void clicksLoginButton() {
+        // Code to click the login button
+    }
+
+    @Then("the user should be redirected to the home page")
+    public void userIsRedirectedToHomePage() {
+        // Code to verify redirection to home page
+    }
+}
+
+4. Test Runner (Java Class):
+A JUnit test runner class is used to execute the Cucumber feature files. This class is annotated with @RunWith(Cucumber.class) and specifies the location of feature files and step definitions.
+
+import org.junit.runner.RunWith;
+import io.cucumber.junit.Cucumber;
+import io.cucumber.junit.CucumberOptions;
+
+@RunWith(Cucumber.class)
+@CucumberOptions(
+    features = "src/test/resources/features", // Path to feature files
+    glue = "stepdefinitions", // Package containing step definitions
+    plugin = {"pretty", "html:target/cucumber-reports.html"} // Reporting options
+)
+public class TestRunner {
+}
+
+Execution:
+The tests can be executed by running the Test Runner class as a JUnit test in an IDE or by using Maven/Gradle(Maven (mvn test)) commands. Cucumber generates reports (e.g., HTML/json) providing detailed test execution results.
+
+============================================================================================================================================================
+
+code formatting
+REST API
+What are Good practices in class naming.
+Class names should be nouns, in mixed case with the first letter of each internal word capitalized. Try to keep your class names simple and descriptive. Use whole words-avoid acronyms and abbreviations
+
+1. Packages:
+Convention: All lowercase, using reverse domain name notation.
+Example: com.example.project.module
+
+2. Classes and Interfaces:
+Convention: Nouns, PascalCase (first letter of each word capitalized).
+Examples:
+
+    public class MyClass { }
+    public interface MyInterface { }
+
+3. Methods:
+Convention: Verbs, camelCase (first letter lowercase, subsequent words capitalized).
+Examples:
+    public void calculateSum() { }
+    public String getName() { return "Example"; }
+
+4. Variables:
+Convention: Nouns, camelCase.
+Examples:
+    int count;
+    String userName;
+
+5. Constants (static final fields):
+Convention: All uppercase, words separated by underscores (SNAKE_CASE).
+Examples:
+    public static final int MAX_VALUE = 100;
+    public static final String DEFAULT_NAME = "Guest";
+
+6. Enums:
+Convention: Enum type name in PascalCase, enum constants in SNAKE_CASE.
+Example:
+
+    public enum Direction {
+        NORTH, SOUTH, EAST, WEST
+    }
+
+7. Generic Types:
+Convention: Single uppercase letter, commonly E for Element, K for Key, N for Number, T for Type, V for Value.
+Example:
+    public class MyGenericClass<T> { }
+
+8. Annotations:
+Convention: PascalCase, starting with @.
+Examples:
+    @Override
+    @Deprecated
+
+
+dependency injection. 
+Good Practices for handling java exceptions correctly.
+What are good practices in API design.
+What are the concept of the SOLID pattern.
+What is hexagonal architecture in microservices.
+Saga pattern in microservices
+API gateway
+lambda and streams
+Good Practices to be followed for Rest API Design
+beneficial for microservices app, beneficial for web apps
+how do u handle exceptions in java and microservices 
+Saga Design pattern
+hexagonal architecture in microservices 
+
+==========================================================================================================================================================
+ 

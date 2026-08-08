@@ -1,0 +1,341 @@
+Maya:
+1.  Create an Arraylist of students sort the student objects in the alphabetical order of names using comparator 
+
+Comparator is an interface that is used for rearranging the Arraylist in a sorted manner. 
+Comparator is used for multiple or customized sorting order. 
+Comparator is used to sort an ArrayList of User-defined objects. In java, Comparator is provided/present in java.util package. Using Comparator we can sort ArrayList on the basis of multiple variables. 
+We can simply implement Comparator without affecting the original User-defined class. 
+To sort an ArrayList using Comparator we need to override the compare() method provided by comparator interface. After rewriting the compare() method we need to call collections.sort() method like below.
+
+Collections.sort(list, comparator)
+
+Parameters:
+list: List which should be sorted based on the comparator.
+comparator: Comparator class instance
+
+
+
+2. lambda expressions - Lambda expression is a anonymous function (without name, return type, access modifier) and having one lambda symobol ->
+ex: (a,b) -> s.op(a+b);
+
+3. what are default and static methods in interfaces. 
+
+Use default methods to add new methods to interfaces without breaking existing implementations or to provide shared behavior that can be overridden.
+Use static methods in interfaces for utility or helper methods that don't depend on object state and don’t need to be overridden.
+
+
+4. synchronization in java 
+Synchronized is the modifier applicable for methods and blocks.
+ If a method or block declared as synchronized then at a time only one thread is allowed to operate on the given object.
+Main advantage of synchronized concept is we can resolve the data inconsistency problems.
+
+5. what is static synchronization  
+Thread will acquire a class-level lock of a Java class, such that only one thread can act on the static synchronized method.
+When a class has both synchronized and static synchronized methods they can run parallelly ,as those two methods require different locks.
+
+6. What is Thread  - An independent part of a program is called thread.
+a.Extending the thread class 
+b. Implementing the Runnable interface.
+
+class MyThread extends Thread{
+public void run(){}
+}
+
+class ThreadDemo{
+    psvm(String[] args)
+{
+
+ Mythread t = new MyThread();
+t.start();
+}
+}
+
+Instead of t.start()  why i am not calling t.run();
+When you ran t.run() it will throw an error or thread will create --> It will not throw an error.
+
+7. Spring boot questions
+
+interface Animal{
+
+public void makeSound();
+}
+
+@component
+Class Dog implements Animal{
+    s.o.p("Bow");
+}
+
+@component
+Class Cat implements Animal{
+   s.o.p("Cat");
+}
+
+Class Demo{
+
+@Autowired
+Animal animal ;
+animal.makeSound();
+
+}
+
+
+8. @component 
+@Bean is used to declare a method that returns a bean.
+
+@Component is a class-level annotation that marks a class as a Spring-managed component. When Spring encounters a class annotated with @Component during component scanning, it automatically registers that class as a bean in the application context. This makes the class eligible for dependency injection and other Spring features. It is a generic stereotype annotation for any Spring-managed component.
+
+9. spring coding question
+
+10. Circuit breaker - resilience 4j - created a program
+
+The Circuit Breaker Pattern is used to prevent system failures by stopping repeated calls to a failing service. The Circuit Breaker Pattern is used to prevent system failures by stopping repeated calls to a failing service.
+
+State                           Description
+Closed (Normal State) -         Requests are allowed as usual. If failures exceed the threshold, it moves to Open.
+Open (Failure Detected)         No requests are sent to the failing service. Instead, an error response or fallback is returned.
+Half-Open (Testing Recovery)    A few test requests are sent. If they succeed, the circuit moves back to Closed. Otherwise, it stays Open.
+
+resilience4j.circuitbreaker:
+ instances:
+   myServiceCircuitBreaker:
+     failureRateThreshold: 50  # 50% failures will trip the circuit
+     waitDurationInOpenState: 5000ms  # Stay open for 5 seconds
+     permittedNumberOfCallsInHalfOpenState: 3
+     slidingWindowSize: 10  # Evaluate last 10 calls
+
+
+11. Edureka server :
+Eureka Server is an application that holds the information about all client-service applications. Every Micro service will register into the Eureka server and Eureka server knows all the client applications running on each port and IP address. Eureka Server is also known as Discovery Server.
+
+Eureka Server comes with the bundle of Spring Cloud. For this, we need to develop the Eureka server and run it on the default port 8761.
+ url: https://www.tutorialspoint.com/spring_boot/spring_boot_eureka_server.htm   -  client-service or discovery server
+
+URL: https://www.tutorialspoint.com/spring_boot/spring_boot_service_registration_with_eureka.htm   - Service Registration with Eureka
+
+12. API gateway
+It will handle all the user requests and responses.
+
+
+2nd one:
+1. Need to sort the employee object based on the name and salary using core java.  - created a program
+2. some times prevent a class being inherited by another  --> you will declare it as final. Final class cannot be subclassed.
+3. Compare two objects and check if they are logically equals how do check it.  - 
+
+== Operator: The == operator checks for reference equality, meaning it only returns true if both references point to the same memory location. This is often not what is intended when comparing objects, especially when the goal is to compare the actual content or state of the objects rather than their memory addresses.
+
+.equals() Method: The .equals() method, designed to check for value/content equality, is more appropriate for comparing the content of objects. However, it requires explicit null checks to avoid NullPointerException, which can lead to cumbersome and error-prone code.
+
+
+4. Collections -> Sets
+How sets store the elements. How to store the elements.
+
+5. What is mean by hashing
+6. Insert the elements it should not allow the duplicate and it should be comes in sorted order. - program created
+
+A Set is a collection that, by definition, does not allow duplicate elements. Attempting to add an element that already exists will be ignored. 
+
+Sorted Order:
+To maintain sorted order, you can use either a SortedSet (like TreeSet in Java), which naturally sorts elements, or a custom implementation that involves inserting elements into a list while ensuring they are placed in the correct sorted position. 
+ 
+
+
+7. What is mean by Hibernate and JPA and how its works?
+   
+8. What is the difference between the merge and remove method and detach methods
+
+merge(entity):
+
+Merges the state of a detached entity into the current persistence context.
+If the entity is not already managed, it will become managed.
+The state of the entity is copied to a managed entity, and an update statement is generated for it.
+
+
+remove(entity):
+
+Transitions an entity from the persistent state to the removed state.
+The entity becomes managed and marked for deletion, and a delete statement is generated for it.
+
+
+9. Lazy and load 
+  Lazy --> 
+  load --> 
+
+10. How JPQL query works?
+
+JPQL stands for Java Persistence Query Language. It is a platform-independent query language that works on entity objects rather than directly on database tables. JPQL is similar to SQL, but the main difference is that it works on entity classes and their attributes, not directly on database tables or columns.
+
+JPQL is Java Persistence Query Language defined in JPA specification. It is used to create queries against entities to store in a relational database.     JPQL is developed based on SQL syntax. But it wont affect the database directly.
+
+
+11. User/Custom defined functional interface of addition of two numbers using java 8
+
+12. Functional interface and lambda expression
+13. Spring core : features of spring core 
+
+Dependency Injection (DI):
+Spring manages the dependencies between objects, promoting loose coupling and making applications easier to test and maintain.
+ 
+Aspect-Oriented Programming (AOP):
+AOP allows developers to modularize cross-cutting concerns, such as logging and transaction management, into separate modules, simplifying code and improving organization. 
+
+Inversion of Control (IoC):
+IoC is the underlying principle of DI, where the framework (Spring) controls the creation and management of objects, rather than the application code.
+ 
+Core Container:
+This module provides the foundation for all other Spring features, including DI, IoC, and resource management. 
+ApplicationContext:
+The ApplicationContext is a crucial component of the Core Container, providing a way to manage beans (objects) within the Spring application. 
+Beans:
+In Spring, objects are managed as beans, and the framework handles their creation, configuration, and lifecycle. 
+
+14. What is inversion of control and how ioc works?
+
+Spring IoC (Inversion of Control) Container is the core of the Spring Framework. It creates objects (beans), configures them, injects dependencies, and manages their life cycles. The container uses Dependency Injection (DI) to manage application components. It retrieves object configuration from XML files, Java-based configuration, annotations, or POJOs. Since the Spring IoC container, not the developer, controls the object lifecycle and dependency management, this concept is called Inversion of Control (IoC).
+
+Spring IoC Container
+The Spring IoC Container is the core of the Spring Framework. It is responsible for managing the lifecycle of beans and their dependencies.
+
+There are two types of IoC containers in Spring:
+
+BeanFactory 
+ApplicationContext 
+1. BeanFactory
+The BeanFactory is the most basic version of the IoC container.
+It provides basic support for dependency injection and bean lifecycle management.
+It is suitable for lightweight applications where advanced features are not required.
+
+2. ApplicationContext
+The ApplicationContext is an advancement of the BeanFactory and provides additional features like event propagation, internationalization, and more.
+It is the preferred choice for most Spring applications due to its advanced capabilities.
+
+Key Features of IoC Container
+The key features of IoC Container are listed below
+
+Dependency Injection: Automatically injects dependencies into our classes.
+Lifecycle Management: Manages the lifecycle of beans, including instantiation, initialization, and deletion.
+Configuration Flexibility: Supports both XML-based and annotation-based configurations.
+Loose Coupling: Promotes loose coupling by decoupling the implementation of objects from their usage.
+
+URL: https://www.geeksforgeeks.org/spring-understanding-inversion-of-control-with-example/
+
+    
+15. How to read a values from property file and use them in spring bean.
+
+Using @Value annotation
+This approach directly injects property values into bean fields.
+@Value("${my.property}")
+private String myProperty;
+
+Using @ConfigurationProperties annotation
+This approach is suitable for binding multiple related properties to a bean.
+@Component
+@ConfigurationProperties(prefix = "my")
+public class MyConfig {
+
+    private String property1;
+    private int property2;
+
+    // Getters and setters
+}
+
+
+
+
+
+16. What is springboot and how are different from traditional way of spring?
+
+Spring Boot is a framework that simplifies and speeds up the development of Spring-based applications, while the traditional Spring framework provides a more general and flexible approach. Spring Boot offers features like auto-configuration, embedded servers, and simplified configuration, reducing boilerplate code and making development faster. 
+
+
+17. @springbootApplication  --> 
+
+The @SpringBootApplication annotation in Spring Boot is a meta-annotation that simplifies application setup by combining three other annotations: @Configuration, @EnableAutoConfiguration, and @ComponentScan. It effectively enables auto-configuration, scans for components in the specified package, and allows for defining custom beans. 
+Here's a more detailed breakdown:
+@Configuration: Indicates that the class provides configuration for the application. 
+@EnableAutoConfiguration: Enables Spring Boot's auto-configuration mechanism, which automatically configures the application based on the libraries on the classpath. 
+@ComponentScan: Instructs Spring to scan the specified package (and sub-packages) for annotated components like @Component, @Service, @Repository, etc
+
+
+18. role of the spring-boot-starter-parent
+
+
+19. what is the difference between jpa respoistory and curd repository
+
+CRUD Repository:  
+There is an interface available in Spring Boot named as CrudRepository that contains methods for CRUD operations. It provides generic Crud operation on a repository. It is defined in the package org.springframework.data.repository and It extends the Spring Data Repository interface. If someone wants to use CrudRepository in the spring boot application he/she has to create an interface and extend the CrudRepository interface. 
+
+Syntax: 
+public interface CrudRepository<T, ID> extends Repository<T, ID>
+
+T: Domain type that repository manages (Generally the Entity/Model class name)
+ID: Type of the id of the entity that repository manages (Generally the wrapper class of your @Id that is created inside the Entity/Model class)
+
+public interface DepartmentRepository extends CrudRepository<Department, Long> {}
+
+JpaRepository :
+JpaRepository is a JPA (Java Persistence API) specific extension of Repository. It contains the full API of CrudRepository and PagingAndSortingRepository. So it contains API for basic CRUD operations and also API for pagination and sorting. 
+
+Syntax:
+
+public interface JpaRepository<T,ID> extends PagingAndSortingRepository<T,ID>, QueryByExampleExecutor<T>
+
+Where:
+
+T: Domain type that repository manages (Generally the Entity/Model class name)
+ID: Type of the id of the entity that repository manages (Generally the wrapper class of your @Id that is created inside the Entity/Model class)
+Example:
+
+public interface DepartmentRepository extends JpaRepository<Department, Long> {}
+
+
+20. How to validate the Rest API ?
+To validate REST API requests, you typically check the request's HTTP method, parameters, and body against expected values or constraints.
+
+1. HTTP Method Validation:
+Ensure the request uses the correct HTTP method (e.g., POST, GET, DELETE) for the intended operation. 
+
+
+2. Parameter Validation:
+Path Parameters:
+Verify path parameters (like /users/{id}) against allowed values or formats. 
+
+3. Body Validation:
+Content Type:
+Verify that the request body's content type matches the expected format (e.g., application/json). 
+
+
+21. How two microservices communicate with each other?
+
+Microservices primarily communicate with each other using either synchronous or asynchronous methods. Synchronous communication involves a service calling another and waiting for a response, often using protocols like HTTP or gRPC. Asynchronous communication, on the other hand, uses message brokers where a service sends a message without waiting for a response, and other services process the message independently. 
+Synchronous Communication:
+HTTP/HTTPS:
+A common method where a service sends an HTTP request to another, and the server processes the request and returns a response. 
+gRPC:
+A high-performance, open-source framework that uses Protocol Buffers for serialization, providing a more efficient communication channel than REST. 
+REST APIs:
+A standard way for services to interact, using HTTP methods like GET, POST, PUT, and DELETE to exchange data. 
+Asynchronous Communication:
+Message Brokers (e.g., RabbitMQ, Kafka):
+A service sends a message to a broker, which then delivers it to one or more subscribing services. 
+Event-Driven Architecture:
+Services react to events published by other services, facilitating loose coupling and independent development. 
+Other Considerations:
+Service Discovery:
+Microservices need to know where other services are located, which can be facilitated by using a service discovery mechanism. 
+Networking:
+Proper networking configuration is essential for enabling communication between microservices, potentially involving a service mesh. 
+Authentication and Authorization:
+Ensuring secure communication between services requires proper authentication and authorization mechanisms. 
+In essence, microservices communicate by exchanging data and requests, either directly (synchronously) or through intermediaries (asynchronously), enabling them to work together to achieve a common goal
+
+
+22. what is mean by message broker 
+
+A message broker is a software system that acts as an intermediary, facilitating communication between different applications, systems, or services. It receives messages from producers (publishers) and delivers them to consumers (subscribers), potentially routing them or transforming them along the way. This enables loosely coupled, distributed systems to interact without requiring direct connections. 
+
+
+23. springboot project -->  2 api get calls only biloer plate code --> from scratch need to devlop
+ Get:/product: Code need to return single Product and  Get:/products--Returns the 5 products
+
+
+Arrays.asList(new Product("1","Apple","10"))
